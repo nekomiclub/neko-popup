@@ -1,0 +1,65 @@
+{
+  "name": "__PACKAGE_NAME",
+  "version": "0.0.1",
+  "description": "__PACKAGE_DESCRIPTION",
+  "keywords": [
+    "__KEYWORDS"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/_package/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./css": "./dist/styles.css"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "dev": "npx eslint . --fix --ext .ts,.tsx && npx vite",
+    "build": "npx rimraf dist && npx tsc && npx vite build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/nekomiclub/__PACKAGE_NAME#readme",
+  "bugs": {
+    "url": "https://github.com/nekomiclub/__PACKAGE_NAME/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nekomiclub/__PACKAGE_NAME.git"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@tailwindcss/vite": "^4.1.16",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "clsx": "^2.1.1",
+    "eslint": "^9.32.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-path": "^2.0.3",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "husky": "^9.1.7",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "rimraf": "^6.0.1",
+    "sass": "^1.97.3",
+    "tailwindcss": "^4.1.16",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1",
+    "vite": "^7.3.1",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}
