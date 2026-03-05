@@ -1,10 +1,8 @@
 {
-  "name": "__PACKAGE_NAME",
-  "version": "0.0.1",
-  "description": "__PACKAGE_DESCRIPTION",
-  "keywords": [
-    "__KEYWORDS"
-  ],
+  "name": "neko-popup",
+  "version": "3.0.0",
+  "description": "",
+  "keywords": [],
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.umd.js",
@@ -28,13 +26,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/nekomiclub/__PACKAGE_NAME#readme",
+  "homepage": "https://github.com/nekomiclub/neko-popup#readme",
   "bugs": {
-    "url": "https://github.com/nekomiclub/__PACKAGE_NAME/issues"
+    "url": "https://github.com/nekomiclub/neko-popup/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nekomiclub/__PACKAGE_NAME.git"
+    "url": "git+https://github.com/nekomiclub/neko-popup.git"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
