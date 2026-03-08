@@ -1,16 +1,17 @@
 'use client';
 
-import { FC, ReactNode, Suspense, useRef, useState } from 'react';
+import { FC, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 
 import EFKW from './components/ErrorComponents';
-import { IPopupNode, IRegisterNodeArgs, PopupContext } from './Interfaces';
+import { IPopupNode, PopupContext, RegisterNodeArgs } from './Interfaces';
 
 
 
 interface IPopupLayerProps {
+  children?: ReactNode | ReactNode[]
+
   /** @default 10000 */
   baseZIndex?: number
-  children?: ReactNode | ReactNode[]
 }
 
 
@@ -21,6 +22,32 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
   const layerRef = useRef<HTMLDivElement>(null);
 
   const baseZIndex = props.baseZIndex ?? 10000;
+
+
+
+  // Handle close closest to user popup on escape
+  useEffect(() => {
+    const controller = new AbortController();
+
+    window.addEventListener('keydown', e => {
+      const key = e.key;
+
+      if (key === 'Escape') {
+        const maxZIndex = Math.max(...nodes.filter(el => el.isOpen).map(el => el.zIndex));
+        const node = nodes.find(el => el.zIndex === maxZIndex);
+        if (!node || node.disabled.includes('onEscape')) return;
+
+        // eslint-disable-next-line
+        invokePopup(node.id, false);
+      }
+    }, { signal: controller.signal });
+
+
+
+    return () => {
+      controller.abort();
+    };
+  }, [nodes]);
 
 
 
@@ -40,18 +67,7 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
   }
 
   /** Add new popup window to state */
-  function registerNode({ id, isOpen }: IRegisterNodeArgs) {
-    const node: IPopupNode = {
-      id,
-      isOpen: false,
-      zIndex: -1
-    };
-
-    setNodes(prev => [...prev, node]);
-
-    // Invoke popup if it is open initially
-    if (isOpen) invokePopup(node, isOpen);
-  }
+  const registerNode = ({ id, isOpen, disabled }: RegisterNodeArgs) => invokePopup({ id, isOpen: false, disabled, zIndex: -1 }, isOpen);
 
 
 

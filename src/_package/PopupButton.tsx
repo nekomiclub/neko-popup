@@ -35,6 +35,7 @@ const PopupButton: FC<IPopupButtonProps> = (props) => {
 
 
 
+  // Handle isActive on context change
   useEffect(() => {
     const node = ctx.nodes.find(el => el.id === props.popupId);
     if (!node) return;

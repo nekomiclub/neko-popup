@@ -9,6 +9,7 @@ import PopupWindow from './_package/PopupWindow';
 
 const Page: React.FC = () => {
   const [state1, setState1] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const popupId1 = 'popup-1';
   const popupId2 = 'popup-2';
@@ -16,26 +17,22 @@ const Page: React.FC = () => {
 
 
   useEffect(() => {
+    setTimeout(() => {
+      console.log('fdssdf');
+      setIsDisabled(true);
+    }, 2000);
+
+    setTimeout(() => {
+      console.log('fdss43432343df');
+      setIsDisabled(false);
+    }, 5000);
+  }, []);
+
+
+
+  useEffect(() => {
     console.log(`state1: `, state1);
   }, [state1]);
-
-
-
-  function onBeforeEnter() {
-    console.log(`Popup 1 animation enter`);
-  }
-
-  function onAfterEnter() {
-    console.log(`Popup 1 animation entered`);
-  }
-
-  function onBeforeExit() {
-    console.log(`Popup 1 animation close`);
-  }
-
-  function onAfterExit() {
-    console.log(`Popup 1 animation closed`);
-  }
 
 
 
@@ -57,18 +54,22 @@ const Page: React.FC = () => {
         setIsOpen={setState1}
         className="w-[500px] h-[300px] bg-white"
         animation={'fade'}
-        onBeforeEnter={onBeforeEnter}
-        onAfterEnter={onAfterEnter}
-        onBeforeExit={onBeforeExit}
-        onAfterExit={onAfterExit}
+        disabled={isDisabled}
       >
         <PopupButton popupId={popupId1}>
           Popup 1
         </PopupButton>
 
+        <PopupButton popupId={popupId2}>
+          Popup 2
+        </PopupButton>
       </PopupWindow>
 
       <PopupWindow id={popupId2} className="w-[500px] h-[300px] bg-white" animation={'scale'}>
+        <PopupButton popupId={popupId1}>
+          Popup 1
+        </PopupButton>
+
         <PopupButton popupId={popupId2}>
           Popup 2
         </PopupButton>

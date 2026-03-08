@@ -3,28 +3,27 @@ import clsx from 'clsx';
 
 
 
-export interface IRegisterNodeArgs {
+
+export type PopupWindowDisabledType = 'onEscape' | 'onLayer';
+export type RegisterNodeArgs = Pick<IPopupNode, 'id' | 'isOpen' | 'disabled'>
+export type StateSetter<S = any> = React.Dispatch<React.SetStateAction<S>>
+
+
+
+export interface IPopupNode {
   id: string
   isOpen: boolean
+  zIndex: number
+  disabled: PopupWindowDisabledType[]
 }
 
 export interface IPopupContext {
   nodes: IPopupNode[]
   layerRef: RefObject<HTMLDivElement | null>
 
-  invokePopup(id: string): void
-  registerNode(args: IRegisterNodeArgs): void
+  invokePopup(id: string, forceState?: boolean): void
+  registerNode(args: RegisterNodeArgs): void
 }
-
-export interface IPopupNode {
-  id: string
-  isOpen: boolean
-  zIndex: number
-}
-
-
-
-export type StateSetter<S = any> = React.Dispatch<React.SetStateAction<S>>
 
 
 

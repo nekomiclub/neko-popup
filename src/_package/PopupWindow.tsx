@@ -1,8 +1,12 @@
-import { FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { FC, ReactNode, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import useMixedState from './hooks/useMixedState';
-import { cn, PopupContext, StateSetter } from './Interfaces';
+import { cn, PopupContext, PopupWindowDisabledType, StateSetter } from './Interfaces';
+
+
+
+type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 
 
@@ -15,6 +19,7 @@ interface IPopupWindowProps {
 
   className?: string
   layerClassName?: string
+  disabled?: PopupWindowDisabledType[] | boolean
 
   /** 
    * Popup dialog animation type
@@ -30,20 +35,30 @@ interface IPopupWindowProps {
    */
   animationDuraionMs?: number
 
-  /** Fire callback when popup invoked to open */
+  /** 
+   * Fire callback when popup invoked to open
+   */
   onBeforeEnter?(): void
 
-  /** Fire callback when popup open animation fullfilled. @see animationDuration */
+  /** 
+   * Fire callback when popup open animation fullfilled. 
+   * 
+   * @see animationDuration
+   */
   onAfterEnter?(): void
 
-  /** Fire callback when popup invoked to close */
+  /** 
+   * Fire callback when popup invoked to close
+   */
   onBeforeExit?(): void
 
-  /** Fire callback when popup close animation fullfilled. @see animationDuration */
+  /** 
+   * Fire callback when popup close animation fullfilled. 
+   * 
+   * @see animationDuration
+   */
   onAfterExit?(): void
 }
-
-type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 
 
@@ -53,13 +68,22 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
   const [layer, setLayer] = useState<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useMixedState(props.isOpen ?? false, props.setIsOpen);
   const [zIndex, setZIndex] = useState(-1);
+  const [disabled, setDisabled] = useState<PopupWindowDisabledType[]>([]);
 
   const animation: PopupWindowAnimationType = props.animation !== undefined ? props.animation : 'fade';
   const animationDuration = props.animationDuraionMs ?? 200;
 
 
 
-  // Mount
+  // Handle disabled
+  useLayoutEffect(() => {
+    if (typeof props.disabled === 'boolean') setDisabled(props.disabled ? ['onEscape', 'onLayer'] : []);
+    else setDisabled(props.disabled ?? []);
+  }, [props.disabled]);
+
+
+
+  // Mount & register node
   useEffect(() => {
     const layer = ctx.layerRef.current;
     if (!layer) return;
@@ -68,7 +92,8 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
     ctx.registerNode({
       id: props.id,
-      isOpen: Boolean(props.isOpen)
+      isOpen: Boolean(props.isOpen),
+      disabled
     });
   }, []);
 
@@ -100,18 +125,29 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
 
+  function layerOnClick() {
+    if (disabled.includes('onLayer')) return;
+
+    ctx.invokePopup(props.id, false);
+  }
+
+
+
   return layer && createPortal(<section
     className={cn(`neko-popup-backdrop`, isOpen && 'neko-popup-backdrop--active', props.layerClassName)}
     aria-hidden={!isOpen}
-    style={{ zIndex: zIndex, transition: `${animationDuration}ms ease-in-out` }}
+    style={{ zIndex: zIndex, transition: `${animationDuration}ms ease-in-out`, cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
+    onClick={layerOnClick}
   >
     <article
       id={props.id}
       className={cn(`neko-popup`, isOpen && 'neko-popup--active', animation && `neko-popup--animation_${animation}`, props.className)}
       role="dialog"
       aria-modal
+      onClick={e => e.stopPropagation()}
     >
       [{props.id}] isOpen: {String(isOpen)}; zIndex: {zIndex}
+      <br />
 
       {props.children}
     </article>
