@@ -3,6 +3,11 @@
   max-height: 100%;
   overflow-y: auto;
 
+  &--noScroll {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
   &--animation {
     &_fade {
       transition: inherit;

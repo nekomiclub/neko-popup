@@ -12,21 +12,31 @@ interface IPopupLayerProps {
 
   /** @default 10000 */
   baseZIndex?: number
+
+  /**
+   * Disable body scroll when there is at least one open popup
+   * 
+   * @default true
+   */
+  disableBodyScrollOnActivePopup?: boolean
 }
 
 
 
 const PopupLayer: FC<IPopupLayerProps> = (props) => {
   const [nodes, setNodes] = useState<IPopupNode[]>([]);
+  const [isScrollDisabled, setIsScrollDisabled] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const baseZIndex = props.baseZIndex ?? 10000;
+  const disableBodyScrollOnActivePopup = props.disableBodyScrollOnActivePopup ?? true;
 
 
 
-  // Handle close closest to user popup on escape
+  // Handle close closest to user popup on escape & scroll
   useEffect(() => {
+    // === Handle close closest popup on escape
     const controller = new AbortController();
 
     window.addEventListener('keydown', e => {
@@ -44,10 +54,26 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
 
 
 
+    // === Disable body scroll on active popup
+    if (disableBodyScrollOnActivePopup) {
+      let anyOpenNode = false;
+      nodes.forEach(el => el.isOpen ? anyOpenNode = true : null);
+
+      setIsScrollDisabled(anyOpenNode);
+    }
+
+
+
     return () => {
       controller.abort();
     };
   }, [nodes]);
+
+  // Handle body scroll
+  useEffect(() => {
+    if (isScrollDisabled) document.body.classList.add('neko-popup--noScroll');
+    else document.body.classList.remove('neko-popup--noScroll');
+  }, [isScrollDisabled]);
 
 
 
@@ -75,6 +101,7 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
     _updateNodeInNodes(node);
   }
 
+  /** Update node in nodes array */
   function _updateNodeInNodes(node: IPopupNode) {
     setNodes(prev => [...prev.filter(el => el.id !== node.id), node]);
   }

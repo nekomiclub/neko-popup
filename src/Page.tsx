@@ -36,7 +36,11 @@ const Page: React.FC = () => {
 
 
 
-  return <main className="w-screen h-screen bg-[#888]">
+  return <main className="w-full h-screen bg-[#888]">
+    <header className="w-full h-[70px] bg-red-400 sticky top-0"></header>
+
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
     <PopupLayer>
       <PopupButton popupId={popupId1}>
         Popup 1
@@ -75,6 +79,8 @@ const Page: React.FC = () => {
         </PopupButton>
       </PopupWindow>
     </PopupLayer>
+
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
   </main>;
 };
 
