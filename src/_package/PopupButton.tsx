@@ -40,8 +40,6 @@ const PopupButton: FC<IPopupButtonProps> = (props) => {
     if (!node) return;
 
     setIsActive(node.isOpen);
-
-    console.log(node);
   }, [ctx]);
 
 

@@ -3,6 +3,21 @@
   max-height: 100%;
   overflow-y: auto;
 
+  &--animation {
+    &_fade {
+      transition: inherit;
+    }
+
+    &_scale {
+      transition: inherit;
+      scale: 0.8;
+
+      &.neko-popup--active {
+        scale: 1;
+      }
+    }
+  }
+
   &-backdrop {
     position: fixed;
     inset: 0;

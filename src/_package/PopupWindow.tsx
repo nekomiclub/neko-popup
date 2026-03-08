@@ -15,7 +15,35 @@ interface IPopupWindowProps {
 
   className?: string
   layerClassName?: string
+
+  /** 
+   * Popup dialog animation type
+   * 
+   * @default "fade"
+   */
+  animation?: 'fade' | 'scale' | null
+
+  /**
+   * Popup animation duration in msec
+   * 
+   * @default 200
+   */
+  animationDuraionMs?: number
+
+  /** Fire callback when popup invoked to open */
+  onBeforeEnter?(): void
+
+  /** Fire callback when popup open animation fullfilled. @see animationDuration */
+  onAfterEnter?(): void
+
+  /** Fire callback when popup invoked to close */
+  onBeforeExit?(): void
+
+  /** Fire callback when popup close animation fullfilled. @see animationDuration */
+  onAfterExit?(): void
 }
+
+type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 
 
@@ -25,6 +53,9 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
   const [layer, setLayer] = useState<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useMixedState(props.isOpen ?? false, props.setIsOpen);
   const [zIndex, setZIndex] = useState(-1);
+
+  const animation: PopupWindowAnimationType = props.animation !== undefined ? props.animation : 'fade';
+  const animationDuration = props.animationDuraionMs ?? 200;
 
 
 
@@ -50,16 +81,33 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
     setZIndex(node.zIndex);
   }, [ctx.nodes]);
 
+  // Handle events (onBeforeEnter, etc)
+  useEffect(() => {
+    if (isOpen) {
+      if (props.onBeforeEnter) props.onBeforeEnter();
+
+      setTimeout(() => {
+        if (props.onAfterEnter) props.onAfterEnter();
+      }, animationDuration);
+    } else {
+      if (props.onBeforeExit) props.onBeforeExit();
+
+      setTimeout(() => {
+        if (props.onAfterExit) props.onAfterExit();
+      }, animationDuration);
+    }
+  }, [isOpen]);
+
 
 
   return layer && createPortal(<section
     className={cn(`neko-popup-backdrop`, isOpen && 'neko-popup-backdrop--active', props.layerClassName)}
     aria-hidden={!isOpen}
-    style={{ zIndex: zIndex }}
+    style={{ zIndex: zIndex, transition: `${animationDuration}ms ease-in-out` }}
   >
     <article
       id={props.id}
-      className={cn(`neko-popup`, isOpen && 'neko-popup--active', props.className)}
+      className={cn(`neko-popup`, isOpen && 'neko-popup--active', animation && `neko-popup--animation_${animation}`, props.className)}
       role="dialog"
       aria-modal
     >
