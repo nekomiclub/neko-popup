@@ -30,7 +30,7 @@ export default function useMixedState<S>(initialStateOrValue?: InitialState<S>, 
   // Propagate state update on external state update even if external setter is not provided
   useEffect(() => {
     if (!isControlled) {
-      // eslint-disable-next-line
+       
       setter(initialStateOrValue);
     }
   }, [initialStateOrValue]);

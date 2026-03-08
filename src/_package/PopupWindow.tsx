@@ -1,4 +1,4 @@
-import { FC, ReactNode, useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { FC, ReactNode, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import useMixedState from './hooks/useMixedState';
@@ -65,10 +65,12 @@ interface IPopupWindowProps {
 const PopupWindow: FC<IPopupWindowProps> = (props) => {
   const ctx = useContext(PopupContext);
 
-  const [layer, setLayer] = useState<HTMLDivElement | null>(null);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useMixedState(props.isOpen ?? false, props.setIsOpen);
   const [zIndex, setZIndex] = useState(-1);
   const [disabled, setDisabled] = useState<PopupWindowDisabledType[]>([]);
+
+  const layerRef = useRef<HTMLDivElement>(null);
 
   const animation: PopupWindowAnimationType = props.animation !== undefined ? props.animation : 'fade';
   const animationDuration = props.animationDuraionMs ?? 200;
@@ -77,18 +79,22 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
   // Handle disabled
   useLayoutEffect(() => {
-    if (typeof props.disabled === 'boolean') setDisabled(props.disabled ? ['onEscape', 'onLayer'] : []);
-    else setDisabled(props.disabled ?? []);
+    let disabled: PopupWindowDisabledType[] = [];
+
+    if (typeof props.disabled === 'boolean') disabled = props.disabled ? ['onEscape', 'onLayer'] : [];
+    else disabled = props.disabled ?? [];
+
+    ctx.updateNodeProperty(props.id, 'disabled', disabled);
   }, [props.disabled]);
 
 
 
   // Mount & register node
   useEffect(() => {
-    const layer = ctx.layerRef.current;
-    if (!layer) return;
+    const container = ctx.containerRef.current;
+    if (!container) return;
 
-    setLayer(layer);
+    setContainer(container);
 
     ctx.registerNode({
       id: props.id,
@@ -104,7 +110,19 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
     setIsOpen(node.isOpen);
     setZIndex(node.zIndex);
+    setDisabled(node.disabled);
   }, [ctx.nodes]);
+
+  // Handle layer z-index change
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!layer) return;
+
+    if (isOpen) layer.style.zIndex = `${zIndex}`;
+    else setTimeout(() => {
+      layer.style.zIndex = `${-1}`;
+    }, animationDuration);
+  }, [isOpen]);
 
   // Handle events (onBeforeEnter, etc)
   useEffect(() => {
@@ -133,11 +151,12 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
 
-  return layer && createPortal(<section
+  return container && createPortal(<section
     className={cn(`neko-popup-backdrop`, isOpen && 'neko-popup-backdrop--active', props.layerClassName)}
     aria-hidden={!isOpen}
-    style={{ zIndex: zIndex, transition: `${animationDuration}ms ease-in-out`, cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
+    style={{ transition: `${animationDuration}ms ease-in-out`, cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
     onClick={layerOnClick}
+    ref={layerRef}
   >
     <article
       id={props.id}
@@ -151,7 +170,7 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
       {props.children}
     </article>
-  </section>, layer);
+  </section>, container);
 };
 
 export default PopupWindow;

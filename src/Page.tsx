@@ -25,7 +25,7 @@ const Page: React.FC = () => {
     setTimeout(() => {
       console.log('fdss43432343df');
       setIsDisabled(false);
-    }, 5000);
+    }, 10000);
   }, []);
 
 

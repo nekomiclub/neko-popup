@@ -1,9 +1,9 @@
 'use client';
 
-import { FC, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 import EFKW from './components/ErrorComponents';
-import { IPopupNode, PopupContext, RegisterNodeArgs } from './Interfaces';
+import { IPopupNode, PopupContext, RegisterNodeArgs, ValueFromPath } from './Interfaces';
 
 
 
@@ -19,7 +19,7 @@ interface IPopupLayerProps {
 const PopupLayer: FC<IPopupLayerProps> = (props) => {
   const [nodes, setNodes] = useState<IPopupNode[]>([]);
 
-  const layerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const baseZIndex = props.baseZIndex ?? 10000;
 
@@ -62,7 +62,20 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
     node.isOpen = newState;
     node.zIndex = newState ? Math.max(...nodes.map(el => el.zIndex), 0) + 1 : -1; // Make new popup invocation closer to user using larger z-index
 
-    // === Update nodes
+    _updateNodeInNodes(node);
+  }
+
+  /** Update node property */
+  function updateNodeProperty<K extends keyof IPopupNode>(id: string, key: K, value: ValueFromPath<IPopupNode, K>) {
+    const node = nodes.find(el => el.id === id);
+    if (!node) return;
+
+    node[key] = value;
+
+    _updateNodeInNodes(node);
+  }
+
+  function _updateNodeInNodes(node: IPopupNode) {
     setNodes(prev => [...prev.filter(el => el.id !== node.id), node]);
   }
 
@@ -73,15 +86,14 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
 
   return <PopupContext.Provider value={{
     nodes,
-    layerRef,
+    containerRef,
     invokePopup,
-    registerNode
+    registerNode,
+    updateNodeProperty
   }}>
     {props.children}
 
-    <Suspense>
-      <section style={{ zIndex: baseZIndex }} ref={layerRef} />
-    </Suspense>
+    <section style={{ zIndex: baseZIndex }} ref={containerRef} />
   </PopupContext.Provider>;
 };
 
