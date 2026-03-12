@@ -18,21 +18,27 @@ jobs:
       - name: Get the repository
         uses: actions/checkout@v4
       - name: Setup nodejs
-         # Setup .npmrc file to publish to npm
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm i
       - name: Run tests
         run: npm run test
+
+  publish:
+    name: Publish package to the NPM
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Publish package to the NPM
         run: npm publish
 
   release:
     name: Create github release
     runs-on: ubuntu-latest
+    needs: publish
     steps:
       - name: Create release
         env:
