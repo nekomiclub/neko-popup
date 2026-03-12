@@ -25,6 +25,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm i
+      - name: Run tests
+        run: npm run test
+      - name: Publish package to the NPM
+        run: npm publish
 
   release:
     name: Create github release
@@ -39,11 +43,4 @@ jobs:
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
               --generate-notes
-
-  publish:
-    name: Publish package to the NPM registry
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish package
-        run: npm publish
       
