@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   build:
@@ -17,7 +18,11 @@ jobs:
       - name: Get the repository
         uses: actions/checkout@v4
       - name: Setup nodejs
+         # Setup .npmrc file to publish to npm
         uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm i
 
@@ -27,10 +32,18 @@ jobs:
     steps:
       - name: Create release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
               --generate-notes
+
+  publish:
+    name: Publish package to the NPM registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish package
+        run: npm publish
+      
