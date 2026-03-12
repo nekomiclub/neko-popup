@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, ReactNode, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -165,9 +167,6 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
       aria-modal
       onClick={e => e.stopPropagation()}
     >
-      [{props.id}] isOpen: {String(isOpen)}; zIndex: {zIndex}
-      <br />
-
       {props.children}
     </article>
   </section>, container);

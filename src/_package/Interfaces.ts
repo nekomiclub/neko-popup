@@ -5,8 +5,8 @@ import clsx from 'clsx';
 
 
 export type PopupWindowDisabledType = 'onEscape' | 'onLayer';
-export type RegisterNodeArgs = Pick<IPopupNode, 'id' | 'isOpen' | 'disabled'>
 export type StateSetter<S = any> = React.Dispatch<React.SetStateAction<S>>
+export type RegisterNodeArgs = Pick<IPopupNode, 'id' | 'isOpen' | 'disabled'>
 
 /** Get value type from nested object path */
 export type ValueFromPath<T, P> =
@@ -35,7 +35,7 @@ export interface IPopupContext {
 
   invokePopup(id: string, forceState?: boolean): void
   registerNode(args: RegisterNodeArgs): void
-  updateNodeProperty<K extends keyof IPopupNode>(id: string, key: K, value: ValueFromPath<IPopupNode, K>)
+  updateNodeProperty<K extends keyof IPopupNode>(id: string, key: K, value: ValueFromPath<IPopupNode, K>): void
 }
 
 

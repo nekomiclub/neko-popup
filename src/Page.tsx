@@ -2,9 +2,7 @@ import './_package/styles.scss';
 
 import React, { useEffect, useState } from 'react';
 
-import { PopupButton, PopupLayer } from './_package';
-import PopupWindow from './_package/PopupWindow';
-
+import { PopupButton, PopupLayer, PopupWindow } from './_package';
 
 
 const Page: React.FC = () => {

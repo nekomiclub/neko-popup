@@ -1,8 +1,16 @@
 {
   "name": "neko-popup",
   "version": "3.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Simple and cool react popup package 🚀",
+  "keywords": [
+    "popup",
+    "aria popup",
+    "dialog",
+    "modal",
+    "react popup",
+    "nextjs popup",
+    "react-component"
+  ],
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.umd.js",
