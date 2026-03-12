@@ -46,6 +46,7 @@ export default defineConfig([globalIgnores(['**/node_modules', '**/dist', '**/bu
     'quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true, }], // Prefer single quotes over double, ifnore template literals
     'jsx-quotes': ['error', 'prefer-double'], // Prefer double quotes for jsx (classname="")
 
+    'react-hooks/set-state-in-effect': 'off',
     'react-hooks/exhaustive-deps': 'off', // Disable react warn for hooks dependencies
 
     'unused-imports/no-unused-imports': 'warn', // Remove unused imports

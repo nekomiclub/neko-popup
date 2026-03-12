@@ -1,9 +1,15 @@
 {
-  "name": "__PACKAGE_NAME",
-  "version": "0.0.1",
-  "description": "__PACKAGE_DESCRIPTION",
+  "name": "neko-popup",
+  "version": "3.0.0",
+  "description": "Simple and cool react popup package 🚀",
   "keywords": [
-    "__KEYWORDS"
+    "popup",
+    "aria popup",
+    "dialog",
+    "modal",
+    "react popup",
+    "nextjs popup",
+    "react-component"
   ],
   "license": "MIT",
   "type": "module",
@@ -28,13 +34,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/nekomiclub/__PACKAGE_NAME#readme",
+  "homepage": "https://github.com/nekomiclub/neko-popup#readme",
   "bugs": {
-    "url": "https://github.com/nekomiclub/__PACKAGE_NAME/issues"
+    "url": "https://github.com/nekomiclub/neko-popup/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nekomiclub/__PACKAGE_NAME.git"
+    "url": "git+https://github.com/nekomiclub/neko-popup.git"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

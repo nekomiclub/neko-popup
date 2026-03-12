@@ -28,7 +28,7 @@
   },
   "include": [
     "src",
-    "src/_package/index.ts"
+    "src/_package/_index.ts"
   ],
   "exclude": [
     "node_modules",
