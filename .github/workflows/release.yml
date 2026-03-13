@@ -1,4 +1,4 @@
-name: neko-popup CI
+name: neko-popup ci
 
 on:
   push:
@@ -26,6 +26,8 @@ jobs:
         run: npm i
       - name: Run tests
         run: npm run test
+      - name: Build package
+        run: npm run build
       - name: Publish package to the NPM
         run: npm publish
       
