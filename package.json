@@ -1,6 +1,6 @@
 {
   "name": "neko-popup",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Simple and cool react popup package 🚀",
   "keywords": [
     "popup",
@@ -28,9 +28,10 @@
     "dist/"
   ],
   "scripts": {
-    "dev": "npx eslint . --fix --ext .ts,.tsx && npx vite",
-    "build": "npx rimraf dist && npx tsc && npx vite build",
-    "test": "echo Testing ..."
+    "dev": "npm run lint && npx vite",
+    "build": "npx rimraf dist && npm run lint && npx tsc && npx vite build",
+    "test": "echo Testing ...",
+    "lint": "npx eslint . --fix"
   },
   "publishConfig": {
     "access": "public"
