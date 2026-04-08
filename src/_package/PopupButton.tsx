@@ -26,7 +26,7 @@ export interface IPopupButtonProps {
 
 
 
-const PopupButton: FC<IPopupButtonProps> = (props) => {
+export const PopupButton: FC<IPopupButtonProps> = (props) => {
   const ctx = useContext(PopupContext);
 
   const [isActive, setIsActive] = useState(false);
@@ -65,5 +65,3 @@ const PopupButton: FC<IPopupButtonProps> = (props) => {
     {props.children}
   </Tag>;
 };
-
-export default PopupButton;

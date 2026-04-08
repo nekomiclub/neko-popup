@@ -7,7 +7,7 @@ import { IPopupNode, PopupContext, RegisterNodeArgs, ValueFromPath } from './Int
 
 
 
-interface IPopupLayerProps {
+export interface IPopupLayerProps {
   children?: ReactNode | ReactNode[]
 
   /** @default 10000 */
@@ -23,7 +23,7 @@ interface IPopupLayerProps {
 
 
 
-const PopupLayer: FC<IPopupLayerProps> = (props) => {
+export const PopupLayer: FC<IPopupLayerProps> = (props) => {
   const [nodes, setNodes] = useState<IPopupNode[]>([]);
   const [isScrollDisabled, setIsScrollDisabled] = useState(false);
 
@@ -123,5 +123,3 @@ const PopupLayer: FC<IPopupLayerProps> = (props) => {
     <section style={{ zIndex: baseZIndex }} ref={containerRef} />
   </PopupContext.Provider>;
 };
-
-export default PopupLayer;

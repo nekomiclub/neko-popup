@@ -1,3 +1,7 @@
-export { default as PopupLayer } from './PopupLayer';
-export { default as PopupButton } from './PopupButton';
-export { default as PopupWindow } from './PopupWindow';
+import './styles.scss';
+
+export * from './PopupButton';
+export * from './PopupLayer';
+export * from './PopupWindow';
+
+export type { IPopupContext, IPopupNode } from './Interfaces';

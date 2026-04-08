@@ -8,11 +8,11 @@ import { cn, PopupContext, PopupWindowDisabledType, StateSetter } from './Interf
 
 
 
-type PopupWindowAnimationType = 'fade' | 'scale' | null
+export type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 
 
-interface IPopupWindowProps {
+export interface IPopupWindowProps {
   id: string
   children: ReactNode | ReactNode[]
 
@@ -64,7 +64,7 @@ interface IPopupWindowProps {
 
 
 
-const PopupWindow: FC<IPopupWindowProps> = (props) => {
+export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   const ctx = useContext(PopupContext);
 
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
@@ -171,5 +171,3 @@ const PopupWindow: FC<IPopupWindowProps> = (props) => {
     </article>
   </section>, container);
 };
-
-export default PopupWindow;
