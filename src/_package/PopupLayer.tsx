@@ -3,7 +3,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 import EFKW from './components/ErrorComponents';
-import { cn, IPopupNode, PopupContext, RegisterNodeArgs, ValueFromPath } from './Interfaces';
+import { cn, IPopupNode, MountNodeArgs, PopupContext, ValueFromPath } from './Interfaces';
 
 
 
@@ -94,7 +94,7 @@ export const PopupLayer: FC<IPopupLayerProps> = (props) => {
     node.isOpen = newState;
     node.zIndex = newState ? Math.max(...nodes.map(el => el.zIndex), 0) + 1 : -1; // Make new popup invocation closer to user using larger z-index
 
-    _updateNodeInNodes(node);
+    _updateNode(node);
   }
 
   /** Update node property */
@@ -104,16 +104,16 @@ export const PopupLayer: FC<IPopupLayerProps> = (props) => {
 
     node[key] = value;
 
-    _updateNodeInNodes(node);
+    _updateNode(node);
   }
 
   /** Update node in nodes array */
-  function _updateNodeInNodes(node: IPopupNode) {
+  function _updateNode(node: IPopupNode) {
     setNodes(prev => [...prev.filter(el => el.id !== node.id), node]);
   }
 
   /** Add new popup window to state */
-  const registerNode = ({ id, isOpen, disabled }: RegisterNodeArgs) => invokePopup({ id, isOpen: false, disabled, zIndex: -1 }, isOpen);
+  const mountNode = ({ id, isOpen, disabled }: MountNodeArgs) => invokePopup({ id, isOpen: false, disabled, zIndex: -1 }, isOpen);
 
 
 
@@ -121,7 +121,7 @@ export const PopupLayer: FC<IPopupLayerProps> = (props) => {
     nodes,
     containerRef,
     invokePopup,
-    registerNode,
+    mountNode,
     updateNodeProperty
   }}>
     {props.children}

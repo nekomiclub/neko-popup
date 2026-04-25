@@ -91,19 +91,27 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
 
-  // Mount & register node
+  // Mount
   useEffect(() => {
     const container = ctx.containerRef.current;
     if (!container) return;
 
     setContainer(container);
 
-    ctx.registerNode({
+    ctx.mountNode({
       id: props.id,
       isOpen: Boolean(props.isOpen),
       disabled
     });
   }, []);
+
+  // Handle toggle node on external isOpen update
+  useEffect(() => {
+    // Skip if node is not mounted yet
+    if (!ctx.nodes.some(el => el.id === props.id)) return;
+
+    ctx.invokePopup(props.id, props.isOpen);
+  }, [props.isOpen]);
 
   // Handle node sync with context
   useEffect(() => {

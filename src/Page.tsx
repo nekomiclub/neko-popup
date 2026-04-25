@@ -15,22 +15,14 @@ const Page: React.FC = () => {
 
 
   useEffect(() => {
-    setTimeout(() => {
-      console.log('fdssdf');
-      setIsDisabled(true);
-    }, 2000);
-
-    setTimeout(() => {
-      console.log('fdss43432343df');
-      setIsDisabled(false);
-    }, 10000);
-  }, []);
-
-
-
-  useEffect(() => {
     console.log(`state1: `, state1);
   }, [state1]);
+
+
+
+  function toggle1popup() {
+    setState1(prev => !prev);
+  }
 
 
 
@@ -47,6 +39,10 @@ const Page: React.FC = () => {
       <PopupButton popupId={popupId2}>
         Popup 2
       </PopupButton>
+
+      <button onClick={toggle1popup}>
+        Popup 1 analog
+      </button>
 
 
 
@@ -65,6 +61,10 @@ const Page: React.FC = () => {
         <PopupButton popupId={popupId2}>
           Popup 2
         </PopupButton>
+
+        <button onClick={toggle1popup}>
+          Popup 1 analog
+        </button>
       </PopupWindow>
 
       <PopupWindow id={popupId2} className="w-[500px] h-[300px] bg-white" animation={'scale'}>
