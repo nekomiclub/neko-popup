@@ -3,7 +3,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 import EFKW from './components/ErrorComponents';
-import { IPopupNode, PopupContext, RegisterNodeArgs, ValueFromPath } from './Interfaces';
+import { cn, IPopupNode, PopupContext, RegisterNodeArgs, ValueFromPath } from './Interfaces';
 
 
 
@@ -24,13 +24,14 @@ export interface IPopupLayerProps {
 
 
 export const PopupLayer: FC<IPopupLayerProps> = (props) => {
-  const [nodes, setNodes] = useState<IPopupNode[]>([]);
-  const [isScrollDisabled, setIsScrollDisabled] = useState(false);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
   const baseZIndex = props.baseZIndex ?? 10000;
   const disableBodyScrollOnActivePopup = props.disableBodyScrollOnActivePopup ?? true;
+
+  const [nodes, setNodes] = useState<IPopupNode[]>([]);
+  const [isScrollDisabled, setIsScrollDisabled] = useState(false);
+  const [isAnyPopupActive, setIsAnyPopupActive] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -67,6 +68,11 @@ export const PopupLayer: FC<IPopupLayerProps> = (props) => {
     return () => {
       controller.abort();
     };
+  }, [nodes]);
+
+  // Handle isAnyPopupActive
+  useEffect(() => {
+    setIsAnyPopupActive(nodes.some(el => el.isOpen));
   }, [nodes]);
 
   // Handle body scroll
@@ -120,6 +126,6 @@ export const PopupLayer: FC<IPopupLayerProps> = (props) => {
   }}>
     {props.children}
 
-    <section style={{ zIndex: baseZIndex }} ref={containerRef} />
+    <section className={cn(`neko-popup-layer`, isAnyPopupActive && 'neko-popup-layer--active')} style={{ zIndex: baseZIndex }} ref={containerRef} />
   </PopupContext.Provider>;
 };

@@ -23,6 +23,16 @@
     }
   }
 
+  &-layer {
+    position: fixed;
+    inset: 0;
+    visibility: hidden;
+
+    &--active {
+      visibility: visible;
+    }
+  }
+
   &-backdrop {
     position: fixed;
     inset: 0;
