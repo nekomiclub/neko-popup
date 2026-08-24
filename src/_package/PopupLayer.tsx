@@ -8,7 +8,7 @@ import { cn, IPopupNode, MountNodeArgs, PopupContext, ValueFromPath } from './In
 
 
 export interface IPopupLayerProps {
-  children?: ReactNode | ReactNode[]
+  children?: ReactNode
 
   /** @default 10000 */
   baseZIndex?: number

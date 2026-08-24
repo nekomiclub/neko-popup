@@ -14,7 +14,7 @@ export type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 export interface IPopupWindowProps {
   id: string
-  children: ReactNode | ReactNode[]
+  children: ReactNode
 
   isOpen?: boolean
   setIsOpen?: StateSetter<boolean>

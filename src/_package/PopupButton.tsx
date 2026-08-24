@@ -17,7 +17,7 @@ export interface IPopupButtonProps {
   as?: 'button' | 'div'
 
   disabled?: boolean
-  children?: ReactNode | ReactNode[]
+  children?: ReactNode
   className?: string
   id?: string
 
