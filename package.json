@@ -2,20 +2,11 @@
   "name": "neko-popup",
   "version": "3.0.5",
   "description": "Simple and cool react popup package 🚀",
-  "keywords": [
-    "popup",
-    "aria popup",
-    "dialog",
-    "modal",
-    "react popup",
-    "nextjs popup",
-    "react-component"
-  ],
-  "license": "MIT",
   "type": "module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -27,16 +18,25 @@
   "files": [
     "dist/"
   ],
+  "keywords": [
+    "popup",
+    "aria popup",
+    "dialog",
+    "modal",
+    "react popup",
+    "nextjs popup",
+    "react-component"
+  ],
   "scripts": {
     "dev": "npm run lint && npx vite",
     "build": "npx rimraf dist && npm run lint && npx tsc && npx vite build",
     "test": "echo Testing ...",
     "lint": "npx eslint . --fix"
   },
+  "homepage": "https://github.com/nekomiclub/neko-popup#readme",
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/nekomiclub/neko-popup#readme",
   "bugs": {
     "url": "https://github.com/nekomiclub/neko-popup/issues"
   },

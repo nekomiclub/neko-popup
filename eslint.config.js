@@ -62,6 +62,8 @@ export default defineConfig([globalIgnores(['**/node_modules', '**/dist', '**/bu
     'import/newline-after-import': 'error', // Add one line after imports
     'import/no-duplicates': 'error', // Merge different imports from single file into one
 
+    'react-hooks/immutability': 'off',
+
     // '@next/next/no-img-element': 'off', // Disable nextjs error when using <img /> tag
 
     'path/no-relative-imports': ['error', { maxDepth: 0, }], // Prefer absolute paths over relative. Only local paths (./) are allowed

@@ -48,7 +48,7 @@ export const PopupLayer: FC<IPopupLayerProps> = (props) => {
         const node = nodes.find(el => el.zIndex === maxZIndex);
         if (!node || node.disabled.includes('onEscape')) return;
 
-        // eslint-disable-next-line
+
         invokePopup(node.id, false);
       }
     }, { signal: controller.signal });

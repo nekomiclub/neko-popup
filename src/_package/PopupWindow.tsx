@@ -30,32 +30,25 @@ export interface IPopupWindowProps {
    */
   animation?: 'fade' | 'scale' | null
 
-  /**
-   * Popup animation duration in msec
-   * 
-   * @default 200
-   */
-  animationDuraionMs?: number
-
   /** 
-   * Fire callback when popup invoked to open
+   * Fire callback when popup is mounting
    */
   onBeforeEnter?(): void
 
   /** 
-   * Fire callback when popup open animation fullfilled. 
+   * Fire callback when popup appear animation finished
    * 
    * @see animationDuration
    */
   onAfterEnter?(): void
 
   /** 
-   * Fire callback when popup invoked to close
+   * Fire callback when popup started hide animation
    */
   onBeforeExit?(): void
 
   /** 
-   * Fire callback when popup close animation fullfilled. 
+   * Fire callback when popup become unmount
    * 
    * @see animationDuration
    */
@@ -69,13 +62,13 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useMixedState(props.isOpen ?? false, props.setIsOpen);
-  const [zIndex, setZIndex] = useState(-1);
+  const [isMounted, setIsMounted] = useState(Boolean(props.isOpen));
+  const [isVisible, setIsVisible] = useState(Boolean(props.isOpen));
   const [disabled, setDisabled] = useState<PopupWindowDisabledType[]>([]);
 
   const layerRef = useRef<HTMLDivElement>(null);
 
   const animation: PopupWindowAnimationType = props.animation !== undefined ? props.animation : 'fade';
-  const animationDuration = props.animationDuraionMs ?? 200;
 
 
 
@@ -119,35 +112,25 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     if (!node) return;
 
     setIsOpen(node.isOpen);
-    setZIndex(node.zIndex);
     setDisabled(node.disabled);
   }, [ctx.nodes]);
-
-  // Handle layer z-index change
-  useEffect(() => {
-    const layer = layerRef.current;
-    if (!layer) return;
-
-    if (isOpen) layer.style.zIndex = `${zIndex}`;
-    else setTimeout(() => {
-      layer.style.zIndex = `${-1}`;
-    }, animationDuration);
-  }, [isOpen]);
 
   // Handle events (onBeforeEnter, etc)
   useEffect(() => {
     if (isOpen) {
       if (props.onBeforeEnter) props.onBeforeEnter();
 
-      setTimeout(() => {
-        if (props.onAfterEnter) props.onAfterEnter();
-      }, animationDuration);
-    } else {
-      if (props.onBeforeExit) props.onBeforeExit();
+      setIsMounted(true);
 
-      setTimeout(() => {
-        if (props.onAfterExit) props.onAfterExit();
-      }, animationDuration);
+      requestAnimationFrame(() => {
+        setIsVisible(true);
+
+        if (props.onAfterEnter) props.onAfterEnter();
+      });
+    } else {
+      setIsVisible(false);
+
+      if (props.onBeforeExit) props.onBeforeExit();
     }
   }, [isOpen]);
 
@@ -159,18 +142,29 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     ctx.invokePopup(props.id, false);
   }
 
+  function handleTransitionEnd() {
+    if (!isVisible) {
+      setIsMounted(false);
 
+      if (props.onAfterExit) props.onAfterExit();
+    }
+  }
+
+
+
+  if (!isMounted) return null;
 
   return container && createPortal(<section
-    className={cn(`neko-popup-backdrop`, isOpen && 'neko-popup-backdrop--active', props.layerClassName)}
-    aria-hidden={!isOpen}
-    style={{ transition: `${animationDuration}ms ease-in-out`, cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
+    className={cn(`neko-popup-backdrop`, isVisible && 'neko-popup-backdrop--active', props.layerClassName)}
+    aria-hidden={!isVisible}
+    style={{ cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
     onClick={layerOnClick}
+    onTransitionEnd={handleTransitionEnd}
     ref={layerRef}
   >
     <article
       id={props.id}
-      className={cn(`neko-popup`, isOpen && 'neko-popup--active', animation && `neko-popup--animation_${animation}`, props.className)}
+      className={cn(`neko-popup`, isVisible && 'neko-popup--active', animation && `neko-popup--animation_${animation}`, props.className)}
       role="dialog"
       aria-modal
       onClick={e => e.stopPropagation()}

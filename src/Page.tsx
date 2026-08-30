@@ -36,9 +36,13 @@ const Page: React.FC = () => {
         Popup 1
       </PopupButton>
 
+      <br />
+
       <PopupButton popupId={popupId2}>
         Popup 2
       </PopupButton>
+
+      <br />
 
       <button onClick={toggle1popup}>
         Popup 1 analog
@@ -51,26 +55,32 @@ const Page: React.FC = () => {
         isOpen={state1}
         setIsOpen={setState1}
         className="w-[500px] h-[300px] bg-white"
-        animation={'fade'}
+        animation={'scale'}
         disabled={isDisabled}
       >
         <PopupButton popupId={popupId1}>
           Popup 1
         </PopupButton>
 
+        <br />
+
         <PopupButton popupId={popupId2}>
           Popup 2
         </PopupButton>
+
+        <br />
 
         <button onClick={toggle1popup}>
           Popup 1 analog
         </button>
       </PopupWindow>
 
-      <PopupWindow id={popupId2} className="w-[500px] h-[300px] bg-white" animation={'scale'}>
+      <PopupWindow id={popupId2} className="w-[500px] h-[300px] bg-red-400" animation={'scale'}>
         <PopupButton popupId={popupId1}>
           Popup 1
         </PopupButton>
+
+        <br />
 
         <PopupButton popupId={popupId2}>
           Popup 2
