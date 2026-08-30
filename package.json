@@ -1,6 +1,6 @@
 {
   "name": "neko-popup",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Simple and cool react popup package 🚀",
   "type": "module",
   "main": "./dist/index.umd.js",
@@ -47,6 +47,8 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@tailwindcss/vite": "^4.1.16",
+    "@types/react": "19.1.9",
+    "@types/react-dom": "19.1.7",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@vitejs/plugin-react": "^4.7.0",
     "clsx": "^2.1.1",
@@ -58,17 +60,15 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "husky": "^9.1.7",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "rimraf": "^6.0.1",
     "sass": "^1.97.3",
     "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
-    "vite-plugin-dts": "^4.5.4",
-    "@types/react": "19.1.9",
-    "@types/react-dom": "19.1.7",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "vite-plugin-dts": "^4.5.4"
   },
   "peerDependencies": {
     "react": ">=19",

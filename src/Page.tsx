@@ -55,7 +55,7 @@ const Page: React.FC = () => {
         isOpen={state1}
         setIsOpen={setState1}
         className="w-[500px] h-[300px] bg-white"
-        animation={'scale'}
+        animation={null}
         disabled={isDisabled}
       >
         <PopupButton popupId={popupId1}>

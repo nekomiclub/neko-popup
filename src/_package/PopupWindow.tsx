@@ -83,7 +83,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   // Mount
   useEffect(() => {
     const container = ctx.containerRef.current;
-    if (!container) return console.warn(`[neko-popup]: Popup layer container is not found in DOM`);;
+    if (!container) return;
 
     setContainer(container);
 
@@ -105,7 +105,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   // Handle node sync with context
   useEffect(() => {
     const node = ctx.nodes.find(el => el.id === props.id);
-    if (!node) return console.warn(`[neko-popup]: Popup node (#${props.id}) is not exist`);
+    if (!node) return;
 
     setIsOpen(node.isOpen);
     setDisabled(node.disabled);
@@ -119,9 +119,11 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
       setIsMounted(true);
 
       requestAnimationFrame(() => {
-        setIsVisible(true);
+        requestAnimationFrame(() => {
+          setIsVisible(true);
 
-        if (props.onAfterEnter) props.onAfterEnter();
+          if (props.onAfterEnter) props.onAfterEnter();
+        });
       });
     } else {
       setIsVisible(false);
@@ -133,7 +135,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   // Handle layer clicks
   useEffect(() => {
     const layer = layerRef.current;
-    if (!layer) return console.warn(`[neko-popup]: Popup (#${props.id}) layer is not found in DOM`);
+    if (!layer) return;
 
     layer.addEventListener('mousedown', ev => {
       // Pass inbound clicks
@@ -144,12 +146,6 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   }, [isMounted]);
 
 
-
-  function layerOnClick() {
-    if (disabled.includes('onLayer')) return;
-
-    ctx.invokePopup(props.id, false);
-  }
 
   function handleTransitionEnd() {
     if (!isVisible) {
