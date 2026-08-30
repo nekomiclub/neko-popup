@@ -64,7 +64,7 @@ export type StateSetter<S = any> = React.Dispatch<React.SetStateAction<S>>
 type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 interface IPopupLayerProps {
-  children?: ReactNode | ReactNode[]
+  children?: ReactNode
 
   /** @default 10000 */
   baseZIndex?: number
@@ -88,16 +88,16 @@ export interface IPopupButtonProps {
   as?: 'button' | 'div'
 
   disabled?: boolean
-  children?: ReactNode | ReactNode[]
+  children?: ReactNode
   className?: string
   id?: string
 
   onClick?(e: React.MouseEvent): void
 }
 
-interface IPopupWindowProps {
+export interface IPopupWindowProps {
   id: string
-  children: ReactNode | ReactNode[]
+  children: ReactNode
 
   isOpen?: boolean
   setIsOpen?: StateSetter<boolean>
@@ -113,34 +113,23 @@ interface IPopupWindowProps {
    */
   animation?: 'fade' | 'scale' | null
 
-  /**
-   * Popup animation duration in msec
-   * 
-   * @default 200
-   */
-  animationDuraionMs?: number
-
   /** 
-   * Fire callback when popup invoked to open
+   * Fire callback when popup is mounting
    */
   onBeforeEnter?(): void
 
   /** 
-   * Fire callback when popup open animation fullfilled. 
-   * 
-   * @see animationDuration
+   * Fire callback when popup appear animation finished
    */
   onAfterEnter?(): void
 
   /** 
-   * Fire callback when popup invoked to close
+   * Fire callback when popup started hide animation
    */
   onBeforeExit?(): void
 
   /** 
-   * Fire callback when popup close animation fullfilled. 
-   * 
-   * @see animationDuration
+   * Fire callback when popup become unmount
    */
   onAfterExit?(): void
 }

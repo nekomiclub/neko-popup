@@ -37,8 +37,6 @@ export interface IPopupWindowProps {
 
   /** 
    * Fire callback when popup appear animation finished
-   * 
-   * @see animationDuration
    */
   onAfterEnter?(): void
 
@@ -49,8 +47,6 @@ export interface IPopupWindowProps {
 
   /** 
    * Fire callback when popup become unmount
-   * 
-   * @see animationDuration
    */
   onAfterExit?(): void
 }
@@ -87,7 +83,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   // Mount
   useEffect(() => {
     const container = ctx.containerRef.current;
-    if (!container) return;
+    if (!container) return console.warn(`[neko-popup]: Popup layer container is not found in DOM`);;
 
     setContainer(container);
 
@@ -109,7 +105,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   // Handle node sync with context
   useEffect(() => {
     const node = ctx.nodes.find(el => el.id === props.id);
-    if (!node) return;
+    if (!node) return console.warn(`[neko-popup]: Popup node (#${props.id}) is not exist`);
 
     setIsOpen(node.isOpen);
     setDisabled(node.disabled);
@@ -133,6 +129,19 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
       if (props.onBeforeExit) props.onBeforeExit();
     }
   }, [isOpen]);
+
+  // Handle layer clicks
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!layer) return console.warn(`[neko-popup]: Popup (#${props.id}) layer is not found in DOM`);
+
+    layer.addEventListener('mousedown', ev => {
+      // Pass inbound clicks
+      if ((ev.target as HTMLElement).closest('.neko-popup')) return;
+
+      ctx.invokePopup(props.id, false);
+    });
+  }, [isMounted]);
 
 
 
@@ -158,7 +167,6 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     className={cn(`neko-popup-backdrop`, isVisible && 'neko-popup-backdrop--active', props.layerClassName)}
     aria-hidden={!isVisible}
     style={{ cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
-    onClick={layerOnClick}
     onTransitionEnd={handleTransitionEnd}
     ref={layerRef}
   >
