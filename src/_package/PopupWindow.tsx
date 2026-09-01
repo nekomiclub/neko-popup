@@ -38,17 +38,17 @@ export interface IPopupWindowProps {
   /** 
    * Fire callback when popup appear animation finished
    */
-  onAfterEnter?(): void
+  onAfterEnter?(ev: React.TransitionEvent): void
 
   /** 
-   * Fire callback when popup started hide animation
+   * Fire callback when popup started hide animation or at initial mount
    */
   onBeforeExit?(): void
 
   /** 
    * Fire callback when popup become unmount
    */
-  onAfterExit?(): void
+  onAfterExit?(ev: React.TransitionEvent): void
 }
 
 
@@ -63,6 +63,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   const [disabled, setDisabled] = useState<PopupWindowDisabledType[]>([]);
 
   const layerRef = useRef<HTMLDivElement>(null);
+  const isAnimationFinished = useRef(true);
 
   const animation: PopupWindowAnimationType = props.animation !== undefined ? props.animation : 'fade';
 
@@ -111,24 +112,20 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     setDisabled(node.disabled);
   }, [ctx.nodes]);
 
-  // Handle events (onBeforeEnter, etc)
+  // Handle events on open moun and on close animation exit
   useEffect(() => {
+    isAnimationFinished.current = false;
+
     if (isOpen) {
+      // On Before Enter
       if (props.onBeforeEnter) props.onBeforeEnter();
 
       setIsMounted(true);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsVisible(true);
-
-          if (props.onAfterEnter) props.onAfterEnter();
-        });
-      });
     } else {
-      setIsVisible(false);
-
+      // On Before Exit
       if (props.onBeforeExit) props.onBeforeExit();
+
+      setIsVisible(false);
     }
   }, [isOpen]);
 
@@ -147,11 +144,33 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
 
-  function handleTransitionEnd() {
-    if (!isVisible) {
+  useLayoutEffect(() => {
+    if (!isMounted || !isOpen) return;
+
+    const id = requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, [isMounted, isOpen]);
+
+
+
+  function handleTransitionEnd(ev: React.TransitionEvent) {
+    // On After Enter
+    if (isVisible && isOpen) {
+      if (props.onAfterEnter && !isAnimationFinished.current) props.onAfterEnter(ev);
+
+      isAnimationFinished.current = true;
+    }
+
+    // On After Exit
+    if (!isVisible && !isOpen) {
+      if (props.onAfterExit && !isAnimationFinished.current) props.onAfterExit(ev);
+
       setIsMounted(false);
 
-      if (props.onAfterExit) props.onAfterExit();
+      isAnimationFinished.current = true;
     }
   }
 

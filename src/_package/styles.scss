@@ -45,17 +45,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    touch-action: none;
-    pointer-events: none;
-    visibility: hidden;
-    opacity: 0;
     transition: 0.2s ease-in-out;
 
-    &--active {
-      opacity: 1;
-      visibility: visible;
-      touch-action: auto;
-      pointer-events: auto;
+    &:not(.neko-popup-backdrop--active) {
+      visibility: hidden;
+      opacity: 0;
     }
   }
 

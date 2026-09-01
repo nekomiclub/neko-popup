@@ -121,17 +121,17 @@ export interface IPopupWindowProps {
   /** 
    * Fire callback when popup appear animation finished
    */
-  onAfterEnter?(): void
+  onAfterEnter?(ev: React.TransitionEvent): void
 
   /** 
-   * Fire callback when popup started hide animation
+   * Fire callback when popup started hide animation or at initial mount
    */
   onBeforeExit?(): void
 
   /** 
    * Fire callback when popup become unmount
    */
-  onAfterExit?(): void
+  onAfterExit?(ev: React.TransitionEvent): void
 }
 ```
 
