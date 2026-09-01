@@ -157,11 +157,12 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
   function handleTransitionEnd(ev: React.TransitionEvent) {
+    // Skip buble events
+    if (!(ev.target as HTMLElement).className.includes('neko-popup-backdrop')) return;
+
     // On After Enter
     if (isVisible && isOpen) {
       if (props.onAfterEnter && !isAnimationFinished.current) props.onAfterEnter(ev);
-
-      isAnimationFinished.current = true;
     }
 
     // On After Exit
@@ -169,9 +170,9 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
       if (props.onAfterExit && !isAnimationFinished.current) props.onAfterExit(ev);
 
       setIsMounted(false);
-
-      isAnimationFinished.current = true;
     }
+
+    isAnimationFinished.current = true;
   }
 
 
