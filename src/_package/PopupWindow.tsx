@@ -176,7 +176,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
   function handleTransitionEnd(ev: React.TransitionEvent) {
     // Skip buble events
-    if (!(ev.target as HTMLElement | undefined)?.className.includes('neko-popup-backdrop')) return;
+    if (ev.target !== ev.currentTarget) return;
 
     // On After Enter
     if (isVisible && isOpen) {
@@ -203,7 +203,10 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   return container && createPortal(<section
     className={cn(`neko-popup-backdrop`, isVisible && 'neko-popup-backdrop--active', props.layerClassName)}
     aria-hidden={!isVisible}
-    style={{ cursor: disabled.includes('onLayer') ? 'default' : 'pointer' }}
+    style={{
+      cursor: disabled.includes('onLayer') ? 'default' : 'pointer',
+      zIndex: props.keep ? 100 : undefined
+    }}
     onTransitionEnd={handleTransitionEnd}
     ref={layerRef}
   >
