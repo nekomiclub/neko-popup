@@ -13,14 +13,25 @@ export type PopupWindowAnimationType = 'fade' | 'scale' | null
 
 
 export interface IPopupWindowProps {
+  /** Popip id */
   id: string
+
+  /** Popup content */
   children: ReactNode
 
+  /** Whether is popup open state */
   isOpen?: boolean
+
+  /** Whether is popup open state setter */
   setIsOpen?: StateSetter<boolean>
 
+  /** Popup window class name */
   className?: string
+
+  /** Popup backdrop class name */
   layerClassName?: string
+
+  /** Disable state change on specified actions or disable fully */
   disabled?: PopupWindowDisabledType[] | boolean
 
   /** 
@@ -29,6 +40,9 @@ export interface IPopupWindowProps {
    * @default "fade"
    */
   animation?: 'fade' | 'scale' | null
+
+  /** Keep popup in the DOM and do not unmount on close */
+  keep?: boolean
 
   /** 
    * Fire callback when popup is mounting
@@ -53,14 +67,19 @@ export interface IPopupWindowProps {
 
 
 
+/** 
+ * Popup window component
+ * 
+ * @requires PopupLayer context provided
+ */
 export const PopupWindow: FC<IPopupWindowProps> = (props) => {
   const ctx = useContext(PopupContext);
 
-  const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [isOpen, setIsOpen] = useMixedState(props.isOpen ?? false, props.setIsOpen);
-  const [isMounted, setIsMounted] = useState(Boolean(props.isOpen));
-  const [isVisible, setIsVisible] = useState(Boolean(props.isOpen));
-  const [disabled, setDisabled] = useState<PopupWindowDisabledType[]>([]);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null); // React portal container
+  const [isOpen, setIsOpen] = useMixedState(props.isOpen ?? false, props.setIsOpen); // Whether is popup open
+  const [isMounted, setIsMounted] = useState(Boolean(props.isOpen)); // Whether is popup mounted in DOM
+  const [isVisible, setIsVisible] = useState(Boolean(props.isOpen)); // Whether is popup currently visible
+  const [disabled, setDisabled] = useState<PopupWindowDisabledType[]>([]); // Disabled events
 
   const layerRef = useRef<HTMLDivElement>(null);
   const isAnimationFinished = useRef(true);
@@ -79,9 +98,20 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     ctx.updateNodeProperty(props.id, 'disabled', disabled);
   }, [props.disabled]);
 
+  // Handle enter/exit animation
+  useLayoutEffect(() => {
+    if (!isMounted || !isOpen) return;
+
+    const id = requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, [isMounted, isOpen]);
 
 
-  // Mount
+
+  // Retrieve react portal and mount popup node in context
   useEffect(() => {
     const container = ctx.containerRef.current;
     if (!container) return;
@@ -112,7 +142,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     setDisabled(node.disabled);
   }, [ctx.nodes]);
 
-  // Handle events on open moun and on close animation exit
+  // Handle mount on open and exit animation on close
   useEffect(() => {
     isAnimationFinished.current = false;
 
@@ -129,7 +159,7 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
     }
   }, [isOpen]);
 
-  // Handle layer clicks
+  // Handle backdrop clicks
   useEffect(() => {
     const layer = layerRef.current;
     if (!layer) return;
@@ -144,21 +174,9 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
 
-  useLayoutEffect(() => {
-    if (!isMounted || !isOpen) return;
-
-    const id = requestAnimationFrame(() => {
-      setIsVisible(true);
-    });
-
-    return () => cancelAnimationFrame(id);
-  }, [isMounted, isOpen]);
-
-
-
   function handleTransitionEnd(ev: React.TransitionEvent) {
     // Skip buble events
-    if (!(ev.target as HTMLElement).className.includes('neko-popup-backdrop')) return;
+    if (!(ev.target as HTMLElement | undefined)?.className.includes('neko-popup-backdrop')) return;
 
     // On After Enter
     if (isVisible && isOpen) {
@@ -177,7 +195,10 @@ export const PopupWindow: FC<IPopupWindowProps> = (props) => {
 
 
 
-  if (!isMounted) return null;
+  if (!props.keep) {
+    // Unmount if doNotUnmount is disabled (default state)
+    if (!isMounted) return null;
+  }
 
   return container && createPortal(<section
     className={cn(`neko-popup-backdrop`, isVisible && 'neko-popup-backdrop--active', props.layerClassName)}

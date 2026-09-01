@@ -59,14 +59,18 @@ function App() {
 
 ## ⚙️ API
 ```ts
-export type PopupWindowDisabledType = 'onEscape' | 'onLayer';
-export type StateSetter<S = any> = React.Dispatch<React.SetStateAction<S>>
 type PopupWindowAnimationType = 'fade' | 'scale' | null
+export type PopupWindowDisabledType = 'onEscape' | 'onLayer';
 
-interface IPopupLayerProps {
+export interface IPopupLayerProps {
+  /** React children */
   children?: ReactNode
 
-  /** @default 10000 */
+  /** 
+   * Base z-index of the popups container
+   * 
+   * @default 10000
+   */
   baseZIndex?: number
 
   /**
@@ -78,6 +82,7 @@ interface IPopupLayerProps {
 }
 
 export interface IPopupButtonProps {
+  /** Popup id */
   popupId: string
 
   /** 
@@ -87,23 +92,42 @@ export interface IPopupButtonProps {
    */
   as?: 'button' | 'div'
 
+  /** Whether is disabled */
   disabled?: boolean
+
+  /** Button content */
   children?: ReactNode
+
+  /** Class name */
   className?: string
+
+  /** Button id */
   id?: string
 
+  /** On click handler */
   onClick?(e: React.MouseEvent): void
 }
 
 export interface IPopupWindowProps {
+  /** Popip id */
   id: string
+
+  /** Popup content */
   children: ReactNode
 
+  /** Whether is popup open state */
   isOpen?: boolean
+
+  /** Whether is popup open state setter */
   setIsOpen?: StateSetter<boolean>
 
+  /** Popup window class name */
   className?: string
+
+  /** Popup backdrop class name */
   layerClassName?: string
+
+  /** Disable state change on specified actions or disable fully */
   disabled?: PopupWindowDisabledType[] | boolean
 
   /** 
@@ -112,6 +136,9 @@ export interface IPopupWindowProps {
    * @default "fade"
    */
   animation?: 'fade' | 'scale' | null
+
+  /** Keep popup in the DOM and do not unmount on close */
+  keep?: boolean
 
   /** 
    * Fire callback when popup is mounting
@@ -134,9 +161,6 @@ export interface IPopupWindowProps {
   onAfterExit?(ev: React.TransitionEvent): void
 }
 ```
-
-## ☁️ Migration Guides
-- [Migration from @fullkekw/popup](./docs/migration.md#fullkekwpopup)
 
 ## ©️ License
 Licensed under MIT ©️ nekomiclub 2026

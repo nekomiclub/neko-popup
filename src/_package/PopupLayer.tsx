@@ -8,9 +8,14 @@ import { cn, IPopupNode, MountNodeArgs, PopupContext, ValueFromPath } from './In
 
 
 export interface IPopupLayerProps {
+  /** React children */
   children?: ReactNode
 
-  /** @default 10000 */
+  /** 
+   * Base z-index of the popups container
+   * 
+   * @default 10000
+   */
   baseZIndex?: number
 
   /**
@@ -23,6 +28,9 @@ export interface IPopupLayerProps {
 
 
 
+/**
+ * Popup layer provides context & container for all popup windows & buttons
+ */
 export const PopupLayer: FC<IPopupLayerProps> = (props) => {
   const baseZIndex = props.baseZIndex ?? 10000;
   const disableBodyScrollOnActivePopup = props.disableBodyScrollOnActivePopup ?? true;

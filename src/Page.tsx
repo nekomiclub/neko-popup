@@ -75,7 +75,7 @@ const Page: React.FC = () => {
         </button>
       </PopupWindow>
 
-      <PopupWindow id={popupId2} className="w-[500px] h-[300px] bg-red-400" animation={'scale'}>
+      <PopupWindow id={popupId2} className="w-[500px] h-[300px] bg-red-400" animation={'scale'} keep>
         <PopupButton popupId={popupId1}>
           Popup 1
         </PopupButton>

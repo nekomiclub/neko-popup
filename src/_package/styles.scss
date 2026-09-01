@@ -50,6 +50,8 @@
     &:not(.neko-popup-backdrop--active) {
       visibility: hidden;
       opacity: 0;
+      touch-action: none !important;
+      pointer-events: none !important;
     }
   }
 

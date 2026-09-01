@@ -1,6 +1,6 @@
 {
   "name": "neko-popup",
-  "version": "3.0.9",
+  "version": "3.1.0",
   "description": "Simple and cool react popup package 🚀",
   "type": "module",
   "main": "./dist/index.umd.js",

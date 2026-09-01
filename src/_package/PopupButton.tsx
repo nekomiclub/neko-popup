@@ -7,6 +7,7 @@ import { cn, PopupContext } from './Interfaces';
 
 
 export interface IPopupButtonProps {
+  /** Popup id */
   popupId: string
 
   /** 
@@ -16,16 +17,29 @@ export interface IPopupButtonProps {
    */
   as?: 'button' | 'div'
 
+  /** Whether is disabled */
   disabled?: boolean
+
+  /** Button content */
   children?: ReactNode
+
+  /** Class name */
   className?: string
+
+  /** Button id */
   id?: string
 
+  /** On click handler */
   onClick?(e: React.MouseEvent): void
 }
 
 
 
+/**
+ * Button to natively change popup state
+ * 
+ * @requires PopupLayer context
+ */
 export const PopupButton: FC<IPopupButtonProps> = (props) => {
   const ctx = useContext(PopupContext);
 
